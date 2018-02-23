@@ -156,11 +156,14 @@
 ::\check::{U+2713}
 ::\uncheck::{U+2717}
 ::\star::{U+2605}
+::\vertdots::{U+22EE}
 
 #Hotstring *0 ?0 C0
 
 
 ;-------------------------------
-;Minimize active window with Ctrl+Windowskey+M
-
+; Minimize active window with Ctrl+Windowskey+M
 ^#m::WinMinimize, A
+
+; Eject HDDaniel external hard drive
+^#e::Run D:\Programs\USBDiskEjector1.3.0.6\USB_Disk_Eject.exe /REMOVELABEL HDDaniel
