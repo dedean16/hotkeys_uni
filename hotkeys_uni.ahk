@@ -174,6 +174,27 @@ Return
 ; Eject HDDaniel external hard drive
 ^#e::Run D:\Programs\USBDiskEjector1.3.0.6\USB_Disk_Eject.exe /REMOVELABEL HDDaniel
 
+
+; ---------- Terminals ----------
+; Run Powershell terminal
+^!t::Run powershell
+
+; Run cmd terminal
+^!y::Run cmd
+
+; Run Powershell terminal as admin
+^!+t::
+	psadmincommand := "PowerShell -windowstyle hidden -Command ""Start-Process powershell -Verb RunAs"""
+	Run %psadmincommand%
+Return
+
+; Run cmd terminal as admin
+^!+y::
+	psadmincommand := "PowerShell -windowstyle hidden -Command ""Start-Process cmd -ArgumentList '/s,/k,pushd,\%V' -Verb RunAs"""
+	Run %psadmincommand%
+Return
+
+
 ; Adobe Reader - Hand Tool, Enable Scrolling and Read Mode
 ; Tip: Open Navigation Pane with F4
 #IfWinActive ahk_class AcrobatSDIWindow
