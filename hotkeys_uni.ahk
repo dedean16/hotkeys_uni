@@ -173,3 +173,18 @@ Return
 
 ; Eject HDDaniel external hard drive
 ^#e::Run D:\Programs\USBDiskEjector1.3.0.6\USB_Disk_Eject.exe /REMOVELABEL HDDaniel
+
+; Adobe Reader - Hand Tool, Enable Scrolling and Read Mode
+; Tip: Open Navigation Pane with F4
+#IfWinActive ahk_class AcrobatSDIWindow
+^#a Up::
+	Sleep 100
+	Send {AppsKey}n 		; Hand Tool
+	Sleep 100
+	Send !vpc 				; Enable Scrolling
+	Sleep 100
+	Send ^h					; Read Mode
+;	Sleep 200
+;	Send {F9}
+Return
+
