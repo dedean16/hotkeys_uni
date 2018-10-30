@@ -162,6 +162,12 @@
 
 
 ;-------------------------------
+; Reload this script
+^#r::
+	TrayTip, , hotkeys_uni script reloaded, 5, 0x10
+	Reload
+Return
+
 ; Minimize active window with Ctrl+Windowskey+M
 ^#m::WinMinimize, A
 
