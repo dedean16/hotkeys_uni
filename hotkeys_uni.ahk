@@ -194,8 +194,13 @@ Return
 	Run %psadmincommand%
 Return
 
+; If Windows Explorer is open, use the menu to open Powershell in current folder instead
+#IfWinActive ahk_class CabinetWClass
+^!t::SendInput !fr
+^!+t::SendInput !fsa
 
-; Adobe Reader - Hand Tool, Enable Scrolling and Read Mode
+
+; ---------- Adobe Reader - Hand Tool, Enable Scrolling and Read Mode ----------
 ; Tip: Open Navigation Pane with F4
 #IfWinActive ahk_class AcrobatSDIWindow
 ^#a Up::
