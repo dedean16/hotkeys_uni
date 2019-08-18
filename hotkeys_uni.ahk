@@ -162,6 +162,7 @@
 
 
 ;-------------------------------
+
 ; Reload this script
 ^#r::
 	TrayTip, , hotkeys_uni script reloaded, 5, 0x10
@@ -175,23 +176,50 @@ Return
 ^#e::Run D:\Programs\USBDiskEjector1.3.0.6\USB_Disk_Eject.exe /REMOVELABEL HDDaniel
 
 
-; ---------- Terminals ----------
-; Run Powershell terminal
-^!t::Run powershell
+; ---------- Terminals -----------
+; --- Windows Native Terminals ---
+^#t::				; Run Powershell terminal
+	EnvGet, homedir, USERPROFILE
+	Run powershell, %homedir%
+Return
 
-; Run cmd terminal
-^!y::Run cmd
+^#y::				; Run cmd terminal
+	EnvGet, homedir, USERPROFILE
+	Run cmd, %homedir%
+Return
 
-; Run Powershell terminal as admin
-^!+t::
-	psadmincommand := "PowerShell -windowstyle hidden -Command ""Start-Process powershell -Verb RunAs"""
+^#+t::				; Run Powershell terminal as admin
+	psadmincommand := "PowerShell -windowstyle hidden -Command ""Start-Process powershell -ArgumentList '-NoExit', '-Command cd $env:userprofile' -Verb RunAs"""
 	Run %psadmincommand%
 Return
 
-; Run cmd terminal as admin
-^!+y::
-	psadmincommand := "PowerShell -windowstyle hidden -Command ""Start-Process cmd -ArgumentList '/s,/k,pushd,\%V' -Verb RunAs"""
+^#+y::				; Run cmd terminal as admin
+	EnvGet, homedir, USERPROFILE
+	psadmincommand := "PowerShell -windowstyle hidden -Command ""Start-Process cmd -ArgumentList '/k cd %userprofile%' -Verb RunAs"""
 	Run %psadmincommand%
+Return
+
+
+; --- Unix-like terminals ---
+^!t::				; Run Git Bash terminal
+	Run C:\Program Files\Git\git-bash.exe --cd-to-home
+Return
+
+^!y::				; Run Cmder terminal
+	EnvGet, homedir, USERPROFILE
+	Run "C:\tools\Cmder\Cmder.exe", %homedir%
+Return
+
+^!+t::				; Run Git Bash terminal as admin
+	EnvGet, homedir, USERPROFILE
+	psadmincommand := "PowerShell -windowstyle hidden -Command ""Start-Process 'C:\Program Files\Git\git-bash.exe' -Verb RunAs"""
+	Run %psadmincommand%, %homedir%
+Return
+
+^!+y::				; Run cmd terminal as admin
+	EnvGet, homedir, USERPROFILE
+	psadmincommand := "PowerShell -windowstyle hidden -Command ""Start-Process 'C:\tools\Cmder\Cmder.exe' -Verb RunAs"""
+	Run %psadmincommand%, %homedir%
 Return
 
 
@@ -211,8 +239,8 @@ Return
 
 ; If Windows Explorer is open, use the menu to open Powershell in current folder instead
 #IfWinActive ahk_class CabinetWClass
-^!t::SendInput !fr
-^!+t::SendInput !fsa
+^#t::SendInput !fr
+^#+t::SendInput !fsa
 
 
 ; ---------- Adobe Reader - Hand Tool, Enable Scrolling and Read Mode ----------
