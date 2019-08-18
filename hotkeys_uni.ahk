@@ -194,6 +194,21 @@ Return
 	Run %psadmincommand%
 Return
 
+
+; Toggle Night Light
+#Numpad4::
+	Run ms-settings:nightlight
+	WinWait, Settings, , 3
+	Sleep 300
+	; Note: different clicks required due to different display scalings
+	Click, 150, 440
+	Click, 135, 360
+	Click, 120, 300
+	Click, 105, 240
+	Sleep 100
+	Send !{F4}
+Return
+
 ; If Windows Explorer is open, use the menu to open Powershell in current folder instead
 #IfWinActive ahk_class CabinetWClass
 ^!t::SendInput !fr
