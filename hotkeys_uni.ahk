@@ -137,6 +137,7 @@
 ::\inf::{U+221E}
 ::\hbar::{U+0127}
 ::\angstrom::{U+00C5}
+::\micro::{U+00B5}
 ::\prop::{U+221d}
 
 ::\arrowleft::{U+2190}
