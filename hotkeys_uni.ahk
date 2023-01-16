@@ -131,6 +131,9 @@
 ::\>>::{U+226B}
 ::\<|::{U+27e8}
 ::\>|::{U+27e9}
+::\bra::{U+27E8}
+::\ket::{U+27E9}
+
 
 ::\sqrt::{U+221A}
 ::\deg::{U+00B0}
@@ -138,6 +141,7 @@
 ::\hbar::{U+0127}
 ::\angstrom::{U+00C5}
 ::\micro::{U+00B5}
+::\um::{U+00B5}m
 ::\prop::{U+221d}
 
 ::\arrowleft::{U+2190}
@@ -158,6 +162,7 @@
 ::\uncheck::{U+2717}
 ::\star::{U+2605}
 ::\vertdots::{U+22EE}
+::\tm::{U+2122}
 
 #Hotstring *0 ?0 C0
 
@@ -166,95 +171,119 @@
 
 ; Reload this script
 ^#r::
-	TrayTip, , hotkeys_uni script reloaded, 5, 0x10
+{
 	Reload
-Return
+}
+
+; Volume
+^#NumpadAdd::Volume_Up
+^#NumpadSub::Volume_Down
+^#Numpad0::Volume_Mute
+
+; Media keys
+#F9::Media_Play_Pause
+#F10::Volume_Mute
+#F11::Volume_Down
+#F12::Volume_Up
 
 ; Minimize active window with Ctrl+Windowskey+M
-^#m::WinMinimize, A
+^#m::WinMinimize "A"
 
-; Eject HDDaniel external hard drive
-^#e::Run D:\Programs\USBDiskEjector1.3.0.6\USB_Disk_Eject.exe /REMOVELABEL HDDaniel
+;; Eject HDDaniel external hard drive
+;^#e::Run D:\Programs\USBDiskEjector1.3.0.6\USB_Disk_Eject.exe /REMOVELABEL HDDaniel
 
 
 ; ---------- Terminals -----------
 ; --- Windows Native Terminals ---
 ^#t::				; Run Powershell terminal
-	EnvGet, homedir, USERPROFILE
-	Run powershell, %homedir%
-Return
+{
+	homedir := EnvGet("USERPROFILE")
+	Run "powershell", homedir
+}
 
 ^#y::				; Run cmd terminal
-	EnvGet, homedir, USERPROFILE
-	Run cmd, %homedir%
-Return
+{
+	homedir := EnvGet("USERPROFILE")
+	Run "cmd", homedir
+}
 
 ^#+t::				; Run Powershell terminal as admin
-	psadmincommand := "PowerShell -windowstyle hidden -Command ""Start-Process powershell -ArgumentList '-NoExit', '-Command cd $env:userprofile' -Verb RunAs"""
-	Run %psadmincommand%
-Return
+{
+	psadmincommand := "PowerShell -windowstyle hidden -Command `"Start-Process powershell -ArgumentList '-NoExit', '-Command cd $env:userprofile' -Verb RunAs`""
+	Run psadmincommand
+}
 
 ^#+y::				; Run cmd terminal as admin
-	EnvGet, homedir, USERPROFILE
-	psadmincommand := "PowerShell -windowstyle hidden -Command ""Start-Process cmd -ArgumentList '/k cd %userprofile%' -Verb RunAs"""
-	Run %psadmincommand%
-Return
+{
+	homedir := EnvGet("USERPROFILE")
+	psadmincommand := "PowerShell -windowstyle hidden -Command `"Start-Process cmd -ArgumentList '/k cd %userprofile%' -Verb RunAs`""
+	Run psadmincommand
+}
 
 
 ; --- Unix-like terminals ---
 ^!t::				; Run Git Bash terminal
-	Run C:\Program Files\Git\git-bash.exe --cd-to-home
-Return
+{
+	Run "C:\Program Files\Git\git-bash.exe --cd-to-home"
+}
 
-^!y::				; Run Cmder terminal
-	EnvGet, homedir, USERPROFILE
-	Run "C:\tools\Cmder\Cmder.exe", %homedir%
-Return
 
 ^!+t::				; Run Git Bash terminal as admin
-	EnvGet, homedir, USERPROFILE
-	psadmincommand := "PowerShell -windowstyle hidden -Command ""Start-Process 'C:\Program Files\Git\git-bash.exe' -Verb RunAs"""
-	Run %psadmincommand%, %homedir%
-Return
-
-^!+y::				; Run cmd terminal as admin
-	EnvGet, homedir, USERPROFILE
-	psadmincommand := "PowerShell -windowstyle hidden -Command ""Start-Process 'C:\tools\Cmder\Cmder.exe' -Verb RunAs"""
-	Run %psadmincommand%, %homedir%
-Return
+{
+	homedir := EnvGet("USERPROFILE")
+	psadmincommand := "PowerShell -windowstyle hidden -Command `"Start-Process 'C:\Program Files\Git\git-bash.exe' -Verb RunAs`""
+	Run psadmincommand, homedir
+}
 
 
-; Toggle Night Light
-#Numpad4::
-	Run ms-settings:nightlight
-	WinWait, Settings, , 3
-	Sleep 300
-	; Note: different clicks required due to different display scalings
-	Click, 150, 440
-	Click, 135, 360
-	Click, 120, 300
-	Click, 105, 240
-	Sleep 100
-	Send !{F4}
-Return
+
+
+; === Shutdown & Sleep/Hibernate ===
+^#+Backspace::
+{
+	Run "DisplaySwitch.exe /internal"
+	Sleep 1500
+	Run "shutdown -p"
+}
+
+^#+SC02B::Run "shutdown -h"
+
+
+; === Multi Monitor ===
+^#Numpad7::
+{
+	Run "DisplaySwitch.exe /internal"
+}
+
+^#Numpad8::
+{
+	Run "DisplaySwitch.exe /extend"
+}
+
+^#Numpad9::
+{
+	Run "DisplaySwitch.exe /external"
+}
+
 
 ; If Windows Explorer is open, use the menu to open Powershell in current folder instead
-#IfWinActive ahk_class CabinetWClass
-^#t::SendInput !fr
-^#+t::SendInput !fsa
+#HotIf WinActive("ahk_class CabinetWClass")
+^#t::SendInput "!fr"
+^#+t::SendInput "!fsa"
 
 
 ; ---------- Adobe Reader - Hand Tool, Enable Scrolling and Read Mode ----------
 ; Tip: Open Navigation Pane with F4
-#IfWinActive ahk_class AcrobatSDIWindow
-^#a Up::
+#HotIf WinActive("ahk_class AcrobatSDIWindow")
+!+#a Up::
+{
 	Sleep 100
-	Send {AppsKey}n 		; Hand Tool
+	Send "{AppsKey}n" 		; Hand Tool
 	Sleep 100
-	Send !vpc 				; Enable Scrolling
+	Send "!vpc"				; Enable Scrolling
 	Sleep 100
-	Send ^h					; Read Mode
+	Send "^h"				; Read Mode
 ;	Sleep 200
 ;	Send {F9}
-Return
 
+}
