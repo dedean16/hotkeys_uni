@@ -119,7 +119,10 @@
 ::\tint::{U+2320} ; top half integral
 ::\bint::{U+2321} ; bottom half integral
 
-::\--::{U+2212}
+::\--::{U+2212}      ; Minus sign
+::\min::{U+2212}     ; Minus sign
+::\endash::{U+2013}  ; En Dash
+::\emdash::{U+2014}  ; Em Dash
 ::\+-::{U+00B1}
 ::\-+::{U+2213}
 ::\=/::{U+2260}
